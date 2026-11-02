@@ -6,9 +6,7 @@
 
 Градиентный спуск - базовый алгоритм оптимизации в машинном обучении. Здесь он применяется к многоэкстремальной функции
 
-$$
-f(x, y) = 2\sin(3xy) + 4\cos(x + 4y)
-$$
+$$f(x, y) = 2\sin(3xy) + 4\cos(x + 4y)$$
 
 и исследуется влияние:
 - способа вычисления градиента;
@@ -19,7 +17,7 @@ $$
 
 ![Анимация градиентного спуска](assets/gradient_descent_animation.gif)
 
-*Аналитический градиентный спуск, $\lambda = 0.005$: точки сходят к ближайшим локальным минимумам.*
+Аналитический градиентный спуск, $\lambda = 0.005$: точки сходят к ближайшим локальным минимумам.
 
 ## Теория
 
@@ -29,19 +27,11 @@ $$
 
 Для функции $f(x, y)$ градиент - вектор частных производных:
 
-$$
-\nabla f(x, y) = \begin{pmatrix} \dfrac{\partial f}{\partial x} \\[6pt] \dfrac{\partial f}{\partial y} \end{pmatrix}
-$$
+$$\nabla f(x, y) = \begin{pmatrix} \frac{\partial f}{\partial x} \\\\ \frac{\partial f}{\partial y} \end{pmatrix}$$
 
 Итерация градиентного спуска:
 
-$$
-\begin{pmatrix} x_{i+1} \\ y_{i+1} \end{pmatrix}
-=
-\begin{pmatrix} x_i \\ y_i \end{pmatrix}
--
-\lambda \, \nabla f(x_i, y_i)
-$$
+$$\begin{pmatrix} x_{i+1} \\\\ y_{i+1} \end{pmatrix} = \begin{pmatrix} x_i \\\\ y_i \end{pmatrix} - \lambda \, \nabla f(x_i, y_i)$$
 
 где:
 - $(x_i, y_i)$ - текущая точка;
@@ -56,19 +46,13 @@ $$
 
 Для целевой функции
 
-$$
-f(x, y) = 2\sin(3xy) + 4\cos(x + 4y)
-$$
+$$f(x, y) = 2\sin(3xy) + 4\cos(x + 4y)$$
 
 частные производные:
 
-$$
-\frac{\partial f}{\partial x} = 6y\cos(3xy) - 4\sin(x + 4y)
-$$
+$$\frac{\partial f}{\partial x} = 6y\cos(3xy) - 4\sin(x + 4y)$$
 
-$$
-\frac{\partial f}{\partial y} = 6x\cos(3xy) - 16\sin(x + 4y)
-$$
+$$\frac{\partial f}{\partial y} = 6x\cos(3xy) - 16\sin(x + 4y)$$
 
 Плюсы: точность и скорость. Минус: нужен явный вид функции и возможность взять производные вручную.
 
@@ -76,13 +60,9 @@ $$
 
 Когда аналитические производные недоступны, используют центральные конечные разности с фиксированным шагом $\Delta$:
 
-$$
-\frac{\partial f}{\partial x} \approx \frac{f(x + \Delta, y) - f(x - \Delta, y)}{2\Delta}
-$$
+$$\frac{\partial f}{\partial x} \approx \frac{f(x + \Delta, y) - f(x - \Delta, y)}{2\Delta}$$
 
-$$
-\frac{\partial f}{\partial y} \approx \frac{f(x, y + \Delta) - f(x, y - \Delta)}{2\Delta}
-$$
+$$\frac{\partial f}{\partial y} \approx \frac{f(x, y + \Delta) - f(x, y - \Delta)}{2\Delta}$$
 
 В проекте: $\Delta x = \Delta y = 0.001$.
 
@@ -92,17 +72,11 @@ $$
 
 Те же центральные разности, но шаг на каждой итерации выбирается случайно:
 
-$$
-\Delta_x, \Delta_y \sim U(\Delta_{\min}, \Delta_{\max})
-$$
+$$\Delta_x, \Delta_y \sim U(\Delta_{\min}, \Delta_{\max})$$
 
-$$
-\frac{\partial f}{\partial x} \approx \frac{f(x + \Delta_x, y) - f(x - \Delta_x, y)}{2\Delta_x}
-$$
+$$\frac{\partial f}{\partial x} \approx \frac{f(x + \Delta_x, y) - f(x - \Delta_x, y)}{2\Delta_x}$$
 
-$$
-\frac{\partial f}{\partial y} \approx \frac{f(x, y + \Delta_y) - f(x, y - \Delta_y)}{2\Delta_y}
-$$
+$$\frac{\partial f}{\partial y} \approx \frac{f(x, y + \Delta_y) - f(x, y - \Delta_y)}{2\Delta_y}$$
 
 В проекте: $\Delta_{\min} = \Delta / 2$, $\Delta_{\max} = 3\Delta$ при $\Delta = 0.001$.
 
@@ -114,22 +88,17 @@ $$
 - слишком большой - расходимость или колебания около минимума;
 - слишком малый - медленная сходимость.
 
-В экспериментах: $\lambda \in \{0.001,\; 0.005,\; 0.01\}$.
+В экспериментах: $\lambda \in \{0.001,\ 0.005,\ 0.01\}$.
 
 Критерий остановки по норме градиента:
 
-$$
-\|\nabla f(x, y)\| = \sqrt{\left(\frac{\partial f}{\partial x}\right)^2 + \left(\frac{\partial f}{\partial y}\right)^2}
-$$
+$$\|\nabla f(x, y)\| = \sqrt{\left(\frac{\partial f}{\partial x}\right)^2 + \left(\frac{\partial f}{\partial y}\right)^2}$$
 
 Если $\|\nabla f\| < \varepsilon$ (здесь $\varepsilon = 10^{-6}$), алгоритм останавливается. Иначе выполняется не более $500$ итераций.
 
 Шаг обновления координат:
 
-$$
-x_{i+1} = x_i - \lambda \frac{\partial f}{\partial x}(x_i, y_i), \qquad
-y_{i+1} = y_i - \lambda \frac{\partial f}{\partial y}(x_i, y_i)
-$$
+$$x_{i+1} = x_i - \lambda \frac{\partial f}{\partial x}(x_i, y_i),\quad y_{i+1} = y_i - \lambda \frac{\partial f}{\partial y}(x_i, y_i)$$
 
 ## Структура проекта
 
@@ -188,13 +157,13 @@ python gradient_descent.py
 
 ![Стохастический, λ=0.01](assets/stochastic_lambda_0.01.png)
 
-### Сравнение $\lambda$
+### Сравнение λ
 
-| $\lambda$ | Поведение |
-|-----------|-----------|
-| $0.001$ | Самая стабильная сходимость, много итераций |
-| $0.005$ | Компромисс скорости и устойчивости |
-| $0.01$ | Быстрее, выше риск колебаний около минимума |
+| λ | Поведение |
+|---|-----------|
+| 0.001 | Самая стабильная сходимость, много итераций |
+| 0.005 | Компромисс скорости и устойчивости |
+| 0.01 | Быстрее, выше риск колебаний около минимума |
 
 ## Выводы
 
